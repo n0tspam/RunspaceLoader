@@ -1,0 +1,9 @@
+C:\Users\localadmin\Desktop\malwarelab\RunspaceLoader\RunspaceLoader\bin\Debug\RunspaceLoader.exe.config
+C:\Users\localadmin\Desktop\malwarelab\RunspaceLoader\RunspaceLoader\bin\Debug\RunspaceLoader.exe
+C:\Users\localadmin\Desktop\malwarelab\RunspaceLoader\RunspaceLoader\bin\Debug\RunspaceLoader.pdb
+C:\Users\localadmin\Desktop\malwarelab\RunspaceLoader\RunspaceLoader\bin\Debug\System.Management.Automation.dll
+C:\Users\localadmin\Desktop\malwarelab\RunspaceLoader\RunspaceLoader\obj\Debug\RunspaceLoader.csproj.AssemblyReference.cache
+C:\Users\localadmin\Desktop\malwarelab\RunspaceLoader\RunspaceLoader\obj\Debug\RunspaceLoader.csproj.CoreCompileInputs.cache
+C:\Users\localadmin\Desktop\malwarelab\RunspaceLoader\RunspaceLoader\obj\Debug\RunspaceLoader.csproj.CopyComplete
+C:\Users\localadmin\Desktop\malwarelab\RunspaceLoader\RunspaceLoader\obj\Debug\RunspaceLoader.exe
+C:\Users\localadmin\Desktop\malwarelab\RunspaceLoader\RunspaceLoader\obj\Debug\RunspaceLoader.pdb
