@@ -84,8 +84,8 @@ namespace RunspaceLoader
                 StringBuilder sb = new StringBuilder();
 
                 // TODO 
-                /*              InitialSessionState initialSessionState = InitialSessionState.CreateDefault();
-                                initialSessionState.ExecutionPolicy = Microsoft.PowerShell.ExecutionPolicy.Bypass;*/
+                /* InitialSessionState initialSessionState = InitialSessionState.CreateDefault();
+                   initialSessionState.ExecutionPolicy = Microsoft.PowerShell.ExecutionPolicy.Bypass;*/
                 var myHost = new CustomPSHost();
                 var initialSessionState = InitialSessionState.CreateDefault();
                 using (var runspace = RunspaceFactory.CreateRunspace(myHost, initialSessionState))
